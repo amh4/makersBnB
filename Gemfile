@@ -14,3 +14,5 @@ gem 'sinatra-contrib', '~> 3.0'
 gem 'webrick', '~> 1.7'
 
 gem 'rubocop', require: false
+
+gem "bcrypt", "~> 3.1"
