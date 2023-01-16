@@ -12,6 +12,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
+    bcrypt (3.1.18)
     concurrent-ruby (1.1.10)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
@@ -70,6 +71,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  bcrypt (~> 3.1)
   rack-test (~> 2.0)
   rake (~> 13.0)
   rubocop
