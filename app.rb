@@ -1,12 +1,12 @@
 # # frozen_string_literal: true
 
-require 'sinatra/base'
-require 'sinatra/reloader'
-require 'sinatra/activerecord'
-
-require_relative 'lib/booking'
-require_relative 'lib/property'
-require_relative 'lib/user'
+require "sinatra/base"
+require "sinatra/reloader"
+require "sinatra/activerecord"
+require "bcrypt"
+require_relative "lib/booking"
+require_relative "lib/property"
+require_relative "lib/user"
 
 class MakersBnB < Sinatra::Base
   enable :sessions
@@ -14,9 +14,26 @@ class MakersBnB < Sinatra::Base
     register Sinatra::Reloader
   end
 
+
+  get '/' do
+    @properties = Property.all
+    return erb(:homepage)
+  end
+
+
   get '/log_in' do
     return erb(:log_in)
   end
+
+
+  get '/sign_up' do
+    return erb(:sign_up)
+  end
+
+
+  get '/:id' do
+    @property = Property.find(params[:id])
+    return erb(:book_a_space)
 
   get "/bookings" do
     @bookings = Booking.where(user_id: session[:user_id])
