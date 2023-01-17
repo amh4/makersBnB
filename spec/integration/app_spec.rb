@@ -24,18 +24,46 @@ describe MakersBnB do
   end  
 
   context "POST /log_in" do
-    it "returns your bookings page if successful " do
+    it "if valid credentials, returns your bookings page" do
       @response = post('/log_in',
       email: 'walker@homenick-beer.co',
       password: "NKhqEmiBWNJXpq"
     )
+    check200
+      expect(@response.body).to include(
+        '<h1>Your Bookings</h1>')
+        # "Himalchuli",
+        # "Mount Everest")
+      
+    end
+
+    it "if invalid credentials, returns login_error page" do
+      @response = post('/log_in',
+        email: 'walker@homenick-beer.co',
+        password: "NKhqEmiBWNJXp"
+      )
+      check200
+      expect(@response.body).to include("<head>Log In Error</head>")
+    end
+
+
+  end 
+  
+  context "GET /bookings when logged in" do
+    it "returns the page of user bookings" do
+      post('/log_in',
+        email: 'walker@homenick-beer.co',
+        password: "NKhqEmiBWNJXpq"
+      )
+      @response = get("/bookings")
+      check200
       expect(@response.body).to include(
         '<h1>Your Bookings</h1>',
         "Himalchuli",
         "Mount Everest")
-      check200
     end
-  end  
+  end
+
 end
 
 

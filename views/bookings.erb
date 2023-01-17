@@ -2,8 +2,16 @@
   <head>Your Bookings</head>
   <body>
     <h1>Your Bookings</h1>
-
-<%# Display properties booked by user%>
+    <div>
+      <% @bookings.each do |booking|%>
+        <p>
+        <%= booking.title %>
+        </p>
+        <p>
+          <%= booking.description %>
+        </p>
+      <% end %>
+    </div>
 
   </body>
 </html>
