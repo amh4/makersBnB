@@ -14,6 +14,9 @@ GEM
     ast (2.4.2)
     bcrypt (3.1.18)
     concurrent-ruby (1.1.10)
+    fake (1.42.11.0)
+    faker (3.1.0)
+      i18n (>= 1.8.11, < 2)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     json (2.6.3)
@@ -68,10 +71,13 @@ GEM
     webrick (1.7.0)
 
 PLATFORMS
+  arm64-darwin-21
   arm64-darwin-22
 
 DEPENDENCIES
   bcrypt (~> 3.1)
+  fake (~> 1.42)
+  faker (~> 3.1)
   rack-test (~> 2.0)
   rake (~> 13.0)
   rubocop

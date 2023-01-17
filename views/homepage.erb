@@ -2,11 +2,15 @@
   <head>Homepage</head>
   <body>
     <h1>MakersBnB</h1>
-
-<%# Display properties 
-Link to login
-link to create account
-Link to log out (if logged in)%>
-
+      <a href="/log_in">Click to login</a><br>
+      <a href="/homepage">Click to logout</a><br>
+      <a href="/sign_up">Click to sign up</a><br>
+      <a href="/your_bookings">Click to view bookings</a><br>
+      <% @properties.each do |property| %>
+      <a href="/<%= property.id %>">Click to view property</a>
+      
+      <%= property.title %>
+      <%= property.daily_rate %><br>
+      <% end %>
   </body>
 </html>

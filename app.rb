@@ -14,4 +14,26 @@ class MakersBnB < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
+
+  get '/' do
+    @properties = Property.all
+    return erb(:homepage)
+  end
+
+  get '/log_in' do
+    return erb(:log_in)
+  end
+
+  get '/sign_up' do
+    return erb(:sign_up)
+  end
+
+  get '/your_bookings' do
+    return erb(:your_bookings)
+  end
+
+  get '/:id' do
+    @property = Property.find(params[:id])
+    return erb(:book_a_space)
+  end
 end

@@ -2,8 +2,24 @@
   <head>Book a space</head>
   <body>
     <h1>Book a space</h1>
+      <%= @property.title %><br><br>
+      <%= @property.description %><br><br>
+      <%= @property.daily_rate%><br><br>
+      <p>Available from</p>
+      <%= @property.first_available %><br><br>
+      <p>Available to</p>
+      <%= @property.last_available %><br><br>
 
-<%# contains property info from selected property. user inputs dates %>
-
+<form method="POST" action="/your_bookings"> <!-- unsure where to post info to -->
+      <div>
+        <label>When would you like to book from</label>
+        <input type="date" name="start_date" />
+      </div>
+      <div>
+        <label>When would you like to book to</label>
+        <input type="date" name="end_date" />
+      </div>
+        <input type="submit" />      
   </body>
+</form>
 </html>
