@@ -29,7 +29,7 @@ describe MakersBnB do
       email: 'walker@homenick-beer.co',
       password: "NKhqEmiBWNJXpq"
     )
-    check200
+      check200
       expect(@response.body).to include(
         '<h1>Your Bookings</h1>')
         # "Himalchuli",
@@ -65,6 +65,3 @@ describe MakersBnB do
   end
 
 end
-
-
-

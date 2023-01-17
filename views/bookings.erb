@@ -3,14 +3,14 @@
   <body>
     <h1>Your Bookings</h1>
     <div>
-      <% @bookings.each do |booking|%>
-        <p>
-        <%= booking.title %>
-        </p>
-        <p>
-          <%= booking.description %>
-        </p>
-      <% end %>
+    <% @properties.each do |property|%>
+      <p>
+      <%= property.title %>
+      </p>
+      <p>
+        <%= property.description %>
+      </p>
+    <% end %>
     </div>
 
   </body>

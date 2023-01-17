@@ -19,8 +19,11 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/bookings" do
-    user_id = session[:user_id]
-    @bookings = Booking.find_by(user_id: user_id)
+    @bookings = Booking.where(user_id: session[:user_id])
+    @properties = []
+    @bookings.each do |booking|
+      @properties << Property.find(booking.property_id)
+    end
     erb(:bookings)
   end
 
@@ -31,7 +34,13 @@ class MakersBnB < Sinatra::Base
     user = User.find_by(email: email)
     if user.authenticate(password)
       session[:user_id] = user.id
-      return erb(:bookings)
+      @bookings = Booking.where(user_id: user.id)
+      @properties = []
+      @bookings.each do |booking|
+        @properties << Property.find(booking.property_id)
+      end
+      binding.irb
+      erb(:bookings)
     else
       return erb(:log_in_error)
     end
