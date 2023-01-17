@@ -16,8 +16,8 @@ describe MakersBnB do
     it "returns the html form to log in" do
       @response = get('/log_in')
       expect(@response.body).to include('<h1>Log In to MakersBnB</h1>',
-        '<input type="text name="email">',
-        '<input type="text name="password">'
+        '<input type="text" name="email">',
+        '<input type="text" name="password">'
       )
       check200
     end
@@ -43,7 +43,7 @@ describe MakersBnB do
         password: "NKhqEmiBWNJXp"
       )
       check200
-      expect(@response.body).to include("<head>Log In Error</head>")
+      expect(@response.body).to include("<h1>Log In Error</h1>")
     end
 
 

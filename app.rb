@@ -39,7 +39,6 @@ class MakersBnB < Sinatra::Base
       @bookings.each do |booking|
         @properties << Property.find(booking.property_id)
       end
-      binding.irb
       erb(:bookings)
     else
       return erb(:log_in_error)
