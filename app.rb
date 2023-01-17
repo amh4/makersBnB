@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'sinatra/base'
-require 'sinatra/reloader'
-require 'sinatra/activerecord'
-
-require_relative 'lib/booking'
-require_relative 'lib/property'
-require_relative 'lib/user'
+require "sinatra/base"
+require "sinatra/reloader"
+require "sinatra/activerecord"
+require "bcrypt"
+require_relative "lib/booking"
+require_relative "lib/property"
+require_relative "lib/user"
 
 class MakersBnB < Sinatra::Base
   # This allows the app code to refresh
