@@ -4,11 +4,14 @@ require 'bcrypt'
 Faker::Config.random = Random.new(5)
 
 10.times do
+  first_name = Faker::Name.first_name
+  password = Faker::Internet.password
+  binding.irb
   User.create(
-    first_name: Faker::Name.first_name,
+    first_name: first_name,
     last_name: Faker::Name.last_name,
     email: Faker::Internet.email,
-    password: Faker::Internet.password
+    password: password
 )
 end
 
