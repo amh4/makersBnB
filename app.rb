@@ -23,7 +23,6 @@ class MakersBnB < Sinatra::Base
     password = params[:password]
 
     user = User.find_by(email: email)
-    # binding.irb
     if user.authenticate(password)
       session[:user_id] = user.id
       return erb(:your_bookings)

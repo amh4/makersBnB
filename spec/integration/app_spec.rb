@@ -26,11 +26,13 @@ describe MakersBnB do
   context "POST /log_in" do
     it "returns your bookings page if successful " do
       @response = post('/log_in',
-      email: 'claretha@walter-dach.name',
-      password: 'KMWBjqEiPNo'
-      )
-      expect(@response.body).to include('<h1>Your Bookings</h1>'
-      )
+      email: 'walker@homenick-beer.co',
+      password: "NKhqEmiBWNJXpq"
+    )
+      expect(@response.body).to include(
+        '<h1>Your Bookings</h1>',
+        "Himalchuli",
+        "Mount Everest")
       check200
     end
   end  
