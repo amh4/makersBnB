@@ -1,7 +1,18 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/josh/Documents/Makers/week5/engineering-project-1/spec/integration/app_spec.rb": {
+      "/Users/orhankhanbayov/Projects/Makers Course/Week 5/engineering-project-1/spec/app_spec.rb": {
+        "lines": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/orhankhanbayov/Projects/Makers Course/Week 5/engineering-project-1/spec/integration/app_spec.rb": {
         "lines": [
           1,
           1,
@@ -9,14 +20,18 @@
           null,
           1,
           1,
-          5,
+          3,
           null,
           1,
           1,
           1,
           1,
+          1,
+          1,
           null,
           null,
+          null,
+          1,
           1,
           1,
           1,
@@ -25,49 +40,15 @@
           null,
           1,
           0,
-          0,
-          0,
-          0,
-          null,
-          null,
-          1,
           0,
           0,
           0,
-          null,
-          null,
-          1,
-          0,
-          0,
-          null,
-          null,
-          1,
-          0,
-          0,
-          null,
-          null,
-          null,
-          1,
-          1,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
           null,
           null,
           null
         ]
       }
     },
-    "timestamp": 1673958493
+    "timestamp": 1673951641
   }
 }

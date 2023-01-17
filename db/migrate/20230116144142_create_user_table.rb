@@ -6,5 +6,9 @@ class CreateUserTable < ActiveRecord::Migration[7.0]
       t.string :password_digest
       t.string :email
     end
+
+    def up
+      add_index :users, :email, unique: true
+    end
   end
 end

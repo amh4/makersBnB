@@ -17,5 +17,7 @@ gem 'rubocop', require: false
 
 gem "bcrypt", "~> 3.1"
 
+gem "pg", "~> 1.4"
+
 
 gem "faker", "~> 3.1"

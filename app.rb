@@ -61,4 +61,18 @@ class MakersBnB < Sinatra::Base
       return erb(:log_in_error)
     end
   end
+
+  get "/sign-up" do
+    return erb(:sign_up)
+  end
+
+  post "/sign-up" do
+    encrypted_password = BCrypt::Password.create(params[:password])
+    @user = User.create(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], password_digest: encrypted_password)
+    if @user.errors.empty?
+      return erb(:sign_up_confirmation)
+    else
+      return erb(:sign_up_error)
+    end
+  end
 end
