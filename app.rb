@@ -1,7 +1,12 @@
+# # frozen_string_literal: true
+
+
+
 require "sinatra/base"
 require "sinatra/reloader"
 require "sinatra/activerecord"
 require "bcrypt"
+require "simple_calendar"
 require_relative "lib/booking"
 require_relative "lib/property"
 require_relative "lib/user"
@@ -26,6 +31,17 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in)
   end
 
+
+  get '/sign_up' do
+    return erb(:sign_up)
+  end
+
+
+  get '/:id' do
+    @property = Property.find(params[:id])
+    return erb(:book_a_space)
+  end
+  
   get "/bookings" do
     if session[:user_id].nil?
       return ""
@@ -33,6 +49,22 @@ class MakersBnB < Sinatra::Base
       @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
       erb(:bookings)
     end
+  end
+
+  post "/bookings" do
+    # way to obtain property id is incomplete and we have requested user to input this as temp workaround
+
+    booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
+    start_date: params[:start_date], end_date: params[:end_date], approved: false)
+    
+  end
+
+  post "/bookings" do
+    # way to obtain property id is incomplete and we have requested user to input this as temp workaround
+
+    booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
+    start_date: params[:start_date], end_date: params[:end_date], approved: false)
+    
   end
 
   post "/log-in" do
