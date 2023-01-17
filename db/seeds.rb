@@ -1,5 +1,5 @@
-require 'faker'
-require 'bcrypt'
+require "faker"
+require "bcrypt"
 
 Faker::Config.random = Random.new(5)
 
@@ -8,8 +8,8 @@ Faker::Config.random = Random.new(5)
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     email: Faker::Internet.email,
-    password: Faker::Internet.password
-)
+    password: Faker::Internet.password,
+  )
 end
 
 20.times do
@@ -20,7 +20,7 @@ end
     description: Faker::ChuckNorris.fact,
     daily_rate: Faker::Number.between(from: 50, to: 150),
     first_available: Faker::Date.in_date_period(month: 3),
-    last_available: Faker::Date.in_date_period(month: 5)
+    last_available: Faker::Date.in_date_period(month: 5),
   )
 end
 
@@ -30,6 +30,6 @@ end
     property_id: Faker::Number.unique.between(from: 1, to: 20),
     start_date: Faker::Date.between(from: "2023-03-01", to: "2023-03-31"),
     end_date: Faker::Date.between(from: "2023-05-01", to: "2023-05-31"),
-    approved: Faker::Boolean.boolean(true_ratio: 0.7)
+    approved: Faker::Boolean.boolean(true_ratio: 0.7),
   )
 end

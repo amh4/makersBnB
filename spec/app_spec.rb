@@ -1,7 +1,7 @@
-# frozen_string_literal: true
+# # frozen_string_literal: true
 
-describe MakersBnB do
-  include Rack::Test::Methods
+# describe MakersBnB do
+#   include Rack::Test::Methods
 
-  let(:app) { MakersBnB.new }
-end
+#   let(:app) { MakersBnB.new }
+# end
