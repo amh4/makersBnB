@@ -48,10 +48,9 @@ class MakersBnB < Sinatra::Base
 
   post "/bookings" do
     # way to obtain property id is incomplete and we have requested user to input this as temp workaround
-
+    return login_fail unless logged_in
     booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
     start_date: params[:start_date], end_date: params[:end_date], approved: false)
-    
   end
 
   post "/bookings" do
@@ -105,5 +104,10 @@ class MakersBnB < Sinatra::Base
     else
       return true
     end
+  end
+
+  def login_fail
+    status 400 
+    erb(:log_in_error)
   end
 end

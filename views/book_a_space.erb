@@ -18,7 +18,10 @@
       <%= @property.last_available %>
     </p>
 
-<form method="POST" action="/bookings"> 
+    <p>
+     <%= @property.id %>
+    </p>
+<form method="POST" action="/bookings?property_id=<%=@property.id%>"> 
       <div>
         <label>When would you like to book from</label>
         <input type="date" name="start_date" />
@@ -26,10 +29,7 @@
       <div>
         <label>When would you like to book to</label>
         <input type="date" name="end_date" />
-      </div>
-      <div>
-        <label>TEMPORARY - What is the property id</label>
-        <input type="number" name="property_id" label="<% @property.id %>" />
+        <input type="submit" value="Request Booking">
       </div>
   </body>
 </form>
