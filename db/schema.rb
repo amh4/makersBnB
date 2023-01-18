@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_145950) do
     t.date "start_date"
     t.date "end_date"
     t.boolean "approved"
+    t.boolean "responded"
     t.index ["property_id"], name: "index_bookings_on_property_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end

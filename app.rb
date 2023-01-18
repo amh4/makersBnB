@@ -1,7 +1,10 @@
+# # frozen_string_literal: true
+
 require "sinatra/base"
 require "sinatra/reloader"
 require "sinatra/activerecord"
 require "bcrypt"
+require "simple_calendar"
 require_relative "lib/booking"
 require_relative "lib/property"
 require_relative "lib/user"
@@ -26,13 +29,41 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in)
   end
 
-  get "/bookings" do
-    if session[:user_id].nil?
-      return ""
+  get "/sign_up" do
+    return erb(:sign_up)
+  end
+
+  post "/approve-reject/:id&:bool" do
+    if params[:bool] == "true"
+      booking = Booking.find(params[:id].to_i)
+      booking.responded = true
+      booking.save
     else
-      @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
-      erb(:bookings)
+      booking = Booking.find(params[:id].to_i)
+      booking.responded = false
+      booking.save
     end
+  end
+
+  get "/account" do
+    @requests = Booking.joins(:property).select("bookings.*, properties.*").where(["bookings.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    return erb(:account_page)
+  end
+
+  get "/bookings" do
+    #   return ""
+    # else
+    #   #      @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
+    #   @properties = Booking.joins(:property).select("bookings.*, properties.*").where("user_id" => session[:user_id])
+    #   erb(:bookings)
+    # end
+  end
+
+  post "/bookings" do
+    # way to obtain property id is incomplete and we have requested user to input this as temp workaround
+    return login_fail unless logged_in
+    booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
+                             start_date: params[:start_date], end_date: params[:end_date], approved: false)
   end
 
   post "/log-in" do
@@ -50,6 +81,13 @@ class MakersBnB < Sinatra::Base
     end
   end
 
+  post "/bookings" do
+    # way to obtain property id is incomplete and we have requested user to input this as temp workaround
+    return login_fail unless logged_in
+    booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
+                             start_date: params[:start_date], end_date: params[:end_date], approved: false, responded: false)
+  end
+
   get "/sign-up" do
     return erb(:sign_up)
   end
@@ -65,7 +103,7 @@ class MakersBnB < Sinatra::Base
     end
   end
 
-  get "/:id" do
+  get "/property/:id" do
     @property = Property.find(params[:id])
     return erb(:book_a_space)
   end
@@ -78,5 +116,10 @@ class MakersBnB < Sinatra::Base
     else
       return true
     end
+  end
+
+  def login_fail
+    status 400
+    erb(:log_in_error)
   end
 end
