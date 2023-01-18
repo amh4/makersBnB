@@ -42,6 +42,7 @@ class MakersBnB < Sinatra::Base
       return ""
     else
       @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
+      binding.irb
       erb(:bookings)
     end
   end

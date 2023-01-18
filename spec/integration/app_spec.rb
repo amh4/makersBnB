@@ -91,9 +91,18 @@ describe "MakersBnB" do
     it "returns the page of user bookings" do
       sign_up
       login
+      post('/bookings',
+        property_id: 10,
+        start_date: '2023-04-01',
+        end_date: '2023-04-03',
+        approved: false)
       @response = get("/bookings")
       check200
-      expect(@response.body).to include "<h1>Your Bookings</h1>"
+      expect(@response.body).to include(
+        "<h1>Your Bookings</h1>",
+        "Your trip to Lhotse starts on 2023-04-01 and ends on 2023-04-03",
+        "Here's the the description of Lhotse:",
+        "Chuck Norris can read all encrypted data, because nothing can hide from Chuck Norris.")
     end
   end
 
@@ -143,15 +152,12 @@ describe "MakersBnB" do
       end_date: '2023-04-03',
       approved: false)
       check200
-      expect(Booking.last.id).to eq(11)
       expect(Booking.last.property_id).to eq(10)
       expect(Booking.last.start_date.to_s).to eq("2023-04-01")
       expect(Booking.last.end_date.to_s).to eq("2023-04-03")
       expect(Booking.last.approved).to eq(false)
     end
-  end
 
-  context "POST /bookings" do
     it "returns logged in error page if user is not signed in" do
       sign_up
       @response = post('/bookings',
@@ -163,5 +169,21 @@ describe "MakersBnB" do
       expect(Booking.last.id).to eq(10)
       expect(@response.body).to include ('Log In Error')
     end
+
+    it "date booked overlaps with another booking" do
+      sign_up
+      login
+      @response = post('/bookings',
+      property_id: 4,
+      start_date: '2023-04-01',
+      end_date: '2023-04-03',
+      approved: false)
+      expect(@response.body).to include(
+        "<h1>Book a space</h1>",
+        "Istor-o-Nal",
+        "This property is unavailable on the dates you selected"
+      )
+    end
+
   end
 end
