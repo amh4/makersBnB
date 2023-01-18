@@ -1,9 +1,13 @@
 require "simplecov"
 require "simplecov-console"
-
+require "database_cleaner-active_record"
+require "rake"
+require "bcrypt"
 ENV["RACK_ENV"] = "test"
 
 require_relative "../app"
+
+Rake.application.load_rakefile
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::Console,
@@ -42,6 +46,18 @@ RSpec.configure do |config|
     # ...rather than:
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+
+  config.before(:suite) do # <-- before entire test run
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+    Rake::Task["db:seed"].invoke
+  end
+  config.before(:each) do # <-- create a "save point" before each test
+    DatabaseCleaner.start
+  end
+  config.after(:each) do # <-- after each individual test roll back to "save point"
+    DatabaseCleaner.clean
   end
 
   # rspec-mocks config goes here. You can use an alternate test double

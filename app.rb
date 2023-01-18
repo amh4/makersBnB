@@ -1,5 +1,3 @@
-# # frozen_string_literal: true
-
 require "sinatra/base"
 require "sinatra/reloader"
 require "sinatra/activerecord"
@@ -14,49 +12,38 @@ class MakersBnB < Sinatra::Base
     register Sinatra::Reloader
   end
 
+  use Rack::Session::Cookie, :key => "rack.session",
+                             :path => "/",
+                             :secret => ENV.fetch("SESSION_SECRET") { SecureRandom.hex(20) }
 
-  get '/' do
+  get "/" do
+    @a = logged_in
     @properties = Property.all
     return erb(:homepage)
   end
 
-
-  get '/log_in' do
+  get "/log-in" do
     return erb(:log_in)
   end
 
-
-  get '/sign_up' do
-    return erb(:sign_up)
-  end
-
-
-  get '/:id' do
-    @property = Property.find(params[:id])
-    return erb(:book_a_space)
-
   get "/bookings" do
-    @bookings = Booking.where(user_id: session[:user_id])
-    @properties = []
-    @bookings.each do |booking|
-      @properties << Property.find(booking.property_id)
+    if session[:user_id].nil?
+      return ""
+    else
+      @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
+      erb(:bookings)
     end
-    erb(:bookings)
   end
 
-  post '/log_in' do
+  post "/log-in" do
     email = params[:email]
     password = params[:password]
 
     user = User.find_by(email: email)
+    return erb(:log_in_error) if user.nil?
     if user.authenticate(password)
       session[:user_id] = user.id
-      @bookings = Booking.where(user_id: user.id)
-      @properties = []
-      @bookings.each do |booking|
-        @properties << Property.find(booking.property_id)
-      end
-      erb(:bookings)
+      return erb(:logged_in)
     else
       return erb(:log_in_error)
     end
@@ -73,6 +60,21 @@ class MakersBnB < Sinatra::Base
       return erb(:sign_up_confirmation)
     else
       return erb(:sign_up_error)
+    end
+  end
+
+  get "/:id" do
+    @property = Property.find(params[:id])
+    return erb(:book_a_space)
+  end
+
+  private
+
+  def logged_in
+    if session[:user_id] == nil
+      return false
+    else
+      return true
     end
   end
 end
