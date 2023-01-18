@@ -7,6 +7,7 @@ require "sinatra/reloader"
 require "sinatra/activerecord"
 require "bcrypt"
 require "simple_calendar"
+require 'date'
 require_relative "lib/booking"
 require_relative "lib/property"
 require_relative "lib/user"
@@ -41,8 +42,12 @@ class MakersBnB < Sinatra::Base
     if session[:user_id].nil?
       return ""
     else
-      @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
-      binding.irb
+      query = "SELECT properties.title, properties.description,
+      bookings.start_date, bookings.end_date
+      FROM properties JOIN bookings
+      ON bookings.user_id=#{session[:user_id]}
+      AND bookings.property_id = properties.id"
+      @trips = ActiveRecord::Base.connection.execute(query)
       erb(:bookings)
     end
   end
@@ -50,6 +55,11 @@ class MakersBnB < Sinatra::Base
   post "/bookings" do
     # way to obtain property id is incomplete and we have requested user to input this as temp workaround
     return login_fail unless logged_in
+    property = Property.find(params[:property_id])
+    available_dates = available_pairs(property)
+    attempted_pair = [Date.parse(params[:start_date]), Date.parse(params[:end_date])]
+    worked = available_dates.any? { |available_pair| lies_within_dates(attempted_pair, available_pair)}
+    redirect("/property/#{params[:property_id]}?try_again=true") unless worked
     booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
     start_date: params[:start_date], end_date: params[:end_date], approved: false)
   end
@@ -85,6 +95,7 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/property/:id" do
+    @try_again = params[:try_again]
     @property = Property.find(params[:id])
     return erb(:book_a_space)
   end
@@ -103,4 +114,26 @@ class MakersBnB < Sinatra::Base
     status 400 
     erb(:log_in_error)
   end
+
+  def available_pairs(property)
+    arr = [[property.first_available]]
+    query = "SELECT bookings.start_date, bookings.end_date
+    FROM properties JOIN bookings
+    ON bookings.property_id = #{property.id}
+    AND properties.id = #{property.id}
+    ORDER BY bookings.start_date ASC"
+    bookings= ActiveRecord::Base.connection.execute(query)
+    bookings.each do |booking|
+      start_date, end_date = Date.parse(booking["start_date"]), Date.parse(booking["end_date"])
+      arr[-1] << start_date.yesterday
+      arr << [end_date.tomorrow]
+    end
+    arr[-1] << property.last_available
+    arr
+  end
+
+  def lies_within_dates(attempted_pair, available_pair)
+    attempted_pair[0] >= available_pair[0] && attempted_pair[1] <= available_pair[1]
+  end
+
 end

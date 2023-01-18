@@ -203,6 +203,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1)
   database_cleaner-active_record (~> 2.0)
+  date (~> 3.3)
   faker (~> 3.1)
   pg (~> 1.4)
   rack-test (~> 2.0)

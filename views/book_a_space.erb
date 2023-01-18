@@ -21,6 +21,11 @@
     <p>
      <%= @property.id %>
     </p>
+  <%if @try_again%>
+  <p>
+  This property is unavailable on the dates you selected
+  </p>
+  <% end %>
 <form method="POST" action="/bookings?property_id=<%=@property.id%>"> 
       <div>
         <label>When would you like to book from</label>

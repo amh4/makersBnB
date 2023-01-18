@@ -28,8 +28,8 @@ end
   Booking.create(
     user_id: Faker::Number.between(from: 1, to: 10),
     property_id: Faker::Number.unique.between(from: 1, to: 20),
-    start_date: Faker::Date.between(from: "2023-03-01", to: "2023-03-31"),
-    end_date: Faker::Date.between(from: "2023-05-01", to: "2023-05-31"),
+    start_date: Faker::Date.between(from: "2023-04-01", to: "2023-04-15"),
+    end_date: Faker::Date.between(from: "2023-04-16", to: "2023-04-30"),
     approved: Faker::Boolean.boolean(true_ratio: 0.7),
   )
 end

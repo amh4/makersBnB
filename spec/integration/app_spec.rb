@@ -178,11 +178,7 @@ describe "MakersBnB" do
       start_date: '2023-04-01',
       end_date: '2023-04-03',
       approved: false)
-      expect(@response.body).to include(
-        "<h1>Book a space</h1>",
-        "Istor-o-Nal",
-        "This property is unavailable on the dates you selected"
-      )
+      expect(@response.status).to eq 302
     end
 
   end
