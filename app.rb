@@ -44,6 +44,11 @@ class MakersBnB < Sinatra::Base
     end
   end
 
+  get "/log-out" do
+    session.clear
+    redirect "/"
+  end
+
   get "/add-a-space" do
     return erb(:add_a_space) if logged_in
   end

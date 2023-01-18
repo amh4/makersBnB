@@ -41,6 +41,15 @@ describe "MakersBnB" do
       expect(@response.body).to include "Click to login"
     end
 
+    it "logs out if logout is pressed" do
+      sign_up
+      login
+      get("/log-out")
+      @response = get("/")
+      check200
+      expect(@response.body).to include "Click to login"
+    end
+
     it "has logout button if logged in" do
       sign_up
       login
