@@ -45,6 +45,7 @@ class MakersBnB < Sinatra::Base
       session[:user_id] = user.id
       return erb(:logged_in)
     else
+      status 400
       return erb(:log_in_error)
     end
   end
@@ -59,6 +60,7 @@ class MakersBnB < Sinatra::Base
     if @user.errors.empty?
       return erb(:sign_up_confirmation)
     else
+      status 400
       return erb(:sign_up_error)
     end
   end

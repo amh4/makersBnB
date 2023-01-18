@@ -95,7 +95,7 @@ describe "MakersBnB" do
       @response = post("/log-in",
                        email: "claretha@walter-dach.name",
                        password: "NKhqEmiBWNJXp")
-      check200
+      check400
       expect(@response.body).to include("<h1>Log In Error</h1>")
     end
   end
@@ -103,7 +103,6 @@ describe "MakersBnB" do
   context "GET /bookings when logged in" do
     it "returns the page of user bookings" do
       sign_up
-
       login
       @response = get("/bookings")
       check200
@@ -130,7 +129,7 @@ describe "MakersBnB" do
     it "returns an error if email is already in use" do
       sign_up
       @response = sign_up
-      check200
+      check400
       expect(@response.body).to include "Email address already in use."
     end
   end
