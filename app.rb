@@ -37,11 +37,6 @@ class MakersBnB < Sinatra::Base
   end
 
 
-  get '/:id' do
-    @property = Property.find(params[:id])
-    return erb(:book_a_space)
-  end
-  
   get "/bookings" do
     if session[:user_id].nil?
       return ""
@@ -97,7 +92,7 @@ class MakersBnB < Sinatra::Base
     end
   end
 
-  get "/:id" do
+  get "/property/:id" do
     @property = Property.find(params[:id])
     return erb(:book_a_space)
   end
