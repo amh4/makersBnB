@@ -156,7 +156,8 @@ describe "MakersBnB" do
     it "creates a property that can be viewed on the hompepage" do
       sign_up
       login
-      post("/add-a-space?title=Snowden&address=Excelsior Rd, Western Ave, Cardiff CF14 3AT&description=Time waits for no man. Unless that man is Chuck Norris.&daily_rate=100&first_available=2023-01-18&last_available=2023-04-30")
+      post("/add-a-space?title=Snowden&address=Excelsior Rd, Western Ave, Cardiff CF14 3AT&description=Time waits for no man.
+         Unless that man is Chuck Norris.&daily_rate=100&first_available=2023-01-18&last_available=2023-04-30")
       @response = get("/")
       check200
       expect(@response.body).to include "Snowden"
