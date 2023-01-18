@@ -44,6 +44,14 @@ class MakersBnB < Sinatra::Base
     end
   end
 
+  get "/book-a-space" do
+    return erb(:add_a_space) if logged_in
+  end
+
+  post "/book-a-space" do
+    Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], daily_rate: params[:daily_rate], first_available: params[:first_available], last_available: params[:last_available])
+  end
+
   post "/bookings" do
     return login_fail unless logged_in
     availabilities = Avail.where("property_id = ?", params[:property_id])
@@ -129,7 +137,6 @@ class MakersBnB < Sinatra::Base
     end
     Avail.find(date.id).destroy
   end
-
 
   def compatible(availability)
     params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
