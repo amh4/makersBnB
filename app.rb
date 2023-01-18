@@ -44,11 +44,11 @@ class MakersBnB < Sinatra::Base
     end
   end
 
-  get "/book-a-space" do
+  get "/add-a-space" do
     return erb(:add_a_space) if logged_in
   end
 
-  post "/book-a-space" do
+  post "/add-a-space" do
     Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], daily_rate: params[:daily_rate], first_available: params[:first_available], last_available: params[:last_available])
   end
 
