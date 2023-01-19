@@ -31,10 +31,6 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in)
   end
 
-  get "/sign_up" do
-    return erb(:sign_up)
-  end
-
   get "/bookings" do
     if session[:user_id].nil?
       return ""
@@ -71,6 +67,10 @@ class MakersBnB < Sinatra::Base
       status 400
       return erb(:log_in_error)
     end
+  end
+
+  get "/sign-up" do
+    return erb(:sign_up)
   end
 
   post "/sign-up" do
