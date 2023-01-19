@@ -5,13 +5,13 @@
     <div>
     <% @trips.each do |trip|%>
       <p>
-      Your trip to <%= trip["title"] %> starts on <%= trip["start_date"] %> and ends on <%= trip["end_date"] %> 
+      Your trip to <%= trip.title %> starts on <%= trip.start_date %> and ends on <%= trip.end_date %> 
       </p>
       <p>
-      Here's the the description of <%= trip["title"] %>:
+      Here's the the description of <%= trip.title %>:
       </p>
       <p>
-        <%= trip["description"] %>
+        <%= trip.description %>
       </p>
     <% end %>
     </div>

@@ -88,7 +88,7 @@ describe "MakersBnB" do
   end
 
   context "GET /bookings when logged in" do
-    xit "returns the page of user bookings" do
+    it "returns the page of user bookings" do
       sign_up
       login
       post("/bookings",
@@ -100,9 +100,9 @@ describe "MakersBnB" do
       check200
       expect(@response.body).to include(
         "<h1>Your Bookings</h1>",
-        "Your trip to Lhotse starts on 2023-04-21 and ends on 2023-04-22",
-        "Here's the the description of Lhotse:",
-        "Chuck Norris can read all encrypted data, because nothing can hide from Chuck Norris."
+        "Your trip to Gasherbrum III starts on 2023-04-21 and ends on 2023-04-22",
+        "Here's the the description of Gasherbrum III:",
+        "Chuck Norris breaks RSA 128-bit encrypted codes in milliseconds."
       )
     end
   end
@@ -144,7 +144,7 @@ describe "MakersBnB" do
   end
 
   context "POST /bookings" do
-    xit "adds users booking to the bookings table" do
+    it "adds users booking to the bookings table" do
       sign_up
       login
       @response = post("/bookings",
@@ -171,7 +171,7 @@ describe "MakersBnB" do
       expect(@response.body).to include ("Log In Error")
     end
 
-    xit "date booked overlaps with another booking" do
+    it "date booked overlaps with another booking" do
       sign_up
       login
       post("/bookings",
