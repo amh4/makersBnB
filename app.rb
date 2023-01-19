@@ -69,9 +69,10 @@ class MakersBnB < Sinatra::Base
     if logged_in
       property = Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], description: params[:description], daily_rate: params[:daily_rate])
       Avail.create(property_id: property.id, first_available: params[:first_available], last_available: params[:last_available])
-      redirect back
+      p = Property.all.last
+      redirect "/add-availability/#{p.id}"
     else
-      redirect ("/")
+      redirect "/"
     end
   end
 
@@ -94,9 +95,14 @@ class MakersBnB < Sinatra::Base
     redirect("/property/#{params[:property_id]}?try_again=true")
   end
 
-  post "/add-availability" do
+  get "/add-availability/:id" do
+    @p = Property.find(params[:id])
+    return erb(:add_availability)
+  end
+
+  post "/add-availability/:id" do
     return login_fail unless logged_in
-    Avail.create(property_id: property.id, first_available: params[:first_available], last_available: params[:last_available])
+    Avail.create(property_id: params[:id], first_available: params[:first_available], last_available: params[:last_available])
     redirect back
   end
 
