@@ -2,6 +2,8 @@ require "spec_helper"
 require "rack/test"
 require_relative "../../app"
 require "bcrypt"
+require "pony"
+require "email"
 
 describe "MakersBnB" do
   include Rack::Test::Methods
@@ -17,6 +19,8 @@ describe "MakersBnB" do
 
   def sign_up
     post("/sign-up?first_name=orhan&last_name=khanbayov&email=orhan.khanbayov@hotmail.co.uk&password=mypassword")
+    # a = EmailTag.new
+    # a.send("orhan.khanbayov@hotmail.co.uk", "testing", "testing")
   end
 
   def login

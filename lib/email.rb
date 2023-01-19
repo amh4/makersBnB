@@ -15,6 +15,3 @@ class EmailTag
     Pony.mail(:to => send, :subject => subject, :body => body)
   end
 end
-
-a = EmailTag.new
-a.send("orhan.khanbayov@hotmail.co.uk", "testing", "testing")
