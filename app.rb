@@ -94,6 +94,12 @@ class MakersBnB < Sinatra::Base
     redirect("/property/#{params[:property_id]}?try_again=true")
   end
 
+  post "/add-availability" do
+    return login_fail unless logged_in
+    Avail.create(property_id: property.id, first_available: params[:first_available], last_available: params[:last_available])
+    redirect back
+  end
+
   post "/log-in" do
     email = params[:email]
     password = params[:password]
