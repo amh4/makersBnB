@@ -1,0 +1,35 @@
+<html>
+  <head></head>
+  <body>
+    <h1>Account Management</h1>
+      <div class="navigation">
+        <ul>
+          <li><a href="/log_in">Click to login</a></li>
+          <li><a href="/logout">Click to logout</a></li>
+          <li><a href="/sign_up">Click to sign up</a></li>
+          <li><a href="/your_bookings">Click to view bookings</a></li>
+        </ul>
+        </div>
+
+        <div>
+          <a href="/bookings">Your Bookings</a><br>
+        </div>
+
+    <div>
+      <% @requests.each do |request| %>
+      <%= request.title %>
+      <%= request.description %>
+      <%= request.daily_rate %>
+
+      <form action="/approve-reject/<%= request.id %>&<%= true %>" method="post">
+        <label>Approve</label>
+        <input type="submit" name="approve" value="Approve">
+      </form>
+       <form action="/approve-reject/<%= request.id %>&<%= false %>" method="post">
+        <label>Reject</label>
+        <input type="submit" name="reject" value="Reject">
+      </form>
+      <% end %>
+    </div>
+  </body>
+</html>

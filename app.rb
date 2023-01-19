@@ -31,6 +31,22 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in)
   end
 
+  get "/sign_up" do
+    return erb(:sign_up)
+  end
+
+  post "/approve-reject/:id&:bool" do
+    if params[:bool] == "true"
+      booking = Booking.find(params[:id].to_i)
+      booking.responded = true
+      booking.save
+    else
+      booking = Booking.find(params[:id].to_i)
+      booking.responded = false
+      booking.save
+    end
+  end
+
   get "/bookings" do
     if session[:user_id].nil?
       return ""
@@ -57,6 +73,11 @@ class MakersBnB < Sinatra::Base
     else
       redirect ("/")
     end
+  end
+
+  get "/account" do
+    @requests = Booking.joins(:property).select("bookings.*, properties.*").where(["bookings.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    return erb(:account_page)
   end
 
   post "/bookings" do
@@ -141,3 +162,4 @@ class MakersBnB < Sinatra::Base
     params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
   end
 end
+
