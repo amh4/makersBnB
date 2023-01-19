@@ -73,10 +73,6 @@ class MakersBnB < Sinatra::Base
     end
   end
 
-  get "/sign-up" do
-    return erb(:sign_up)
-  end
-
   post "/sign-up" do
     encrypted_password = BCrypt::Password.create(params[:password])
     @user = User.create(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], password_digest: encrypted_password)
@@ -129,7 +125,6 @@ class MakersBnB < Sinatra::Base
     end
     Avail.find(date.id).destroy
   end
-
 
   def compatible(availability)
     params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
