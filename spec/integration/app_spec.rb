@@ -41,6 +41,15 @@ describe "MakersBnB" do
       expect(@response.body).to include "Click to login"
     end
 
+    it "logs out if logout is pressed" do
+      sign_up
+      login
+      get("/log-out")
+      @response = get("/")
+      check200
+      expect(@response.body).to include "Click to login"
+    end
+
     it "has logout button if logged in" do
       sign_up
       login
@@ -104,10 +113,19 @@ describe "MakersBnB" do
     it "returns the page of user bookings" do
       sign_up
       login
+      post("/bookings",
+           property_id: 10,
+           start_date: "2023-04-21",
+           end_date: "2023-04-22",
+           approved: false)
       @response = get("/bookings")
       check200
-      expect(@response.body).to include "<h1>Your Bookings</h1>"
-
+      expect(@response.body).to include(
+        "<h1>Your Bookings</h1>",
+        "Your trip to Gasherbrum III starts on 2023-04-21 and ends on 2023-04-22",
+        "Here's the the description of Gasherbrum III:",
+        "Chuck Norris breaks RSA 128-bit encrypted codes in milliseconds."
+      )
     end
   end
 
@@ -134,15 +152,105 @@ describe "MakersBnB" do
       expect(@response.body).to include "Email address already in use."
     end
   end
-#### TEST IS DEPENDENT ON OTHER BRANCH. METHOD DOES WORK IN LOCAL HOST
-  # context "get /bookings" do
-  # end
 
   context "GET /account" do
     it "returns a page containing your bookings that need to be approved" do
       post("/log-in?email=adam.hoar@icloud.com&password=password")
       @response = get('/account')
       expect(@response.body).to include('Baltoro Kangri')
+    end
+  end
+
+  context "GET /add-a-space" do
+    it "returns nothing if not logged in" do
+      @response = get("/add-a-space")
+      check200
+      expect(@response.body).to include ""
+    end
+    it "returns add a space forms if logged in" do
+      sign_up
+      login
+      @response = get("/add-a-space")
+      check200
+      expect(@response.body).to include ('<input type="text" name="title" />')
+      expect(@response.body).to include ('<input type="text" name="address" />')
+      expect(@response.body).to include ('<input type="text" name="description" />')
+      expect(@response.body).to include ('<input type="number" name="daily_rate" />')
+      expect(@response.body).to include ('<input type="date" name="first_available" />')
+      expect(@response.body).to include ('<input type="date" name="last_available" />')
+      expect(@response.body).to include ('<input type="submit" value="Submit the form" />')
+    end
+  end
+
+  context "POST /add-a-space" do
+    it "creates a property that can be viewed on the hompepage" do
+      sign_up
+      login
+      post("/add-a-space?title=Snowden&address=Excelsior Rd, Western Ave, Cardiff CF14 3AT&description=Time waits for no man.
+         Unless that man is Chuck Norris.&daily_rate=100&first_available=2023-01-18&last_available=2023-04-30")
+      @response = get("/")
+      check200
+      expect(@response.body).to include "Snowden"
+    end
+  end
+
+  context "GET /property/:id" do
+    it "gets booking page for property with :id" do
+      @response = get("/property/1")
+      check200
+      expect(@response.body).to include(
+        "<head>Book a space</head>",
+        "K12",
+        "Chuck Norris doesn't delete files, he blows them away."
+      )
+    end
+  end
+
+  context "POST /bookings" do
+    it "adds users booking to the bookings table, two new availabilities should be created, one destroyed" do
+      sign_up
+      login
+      @response = post("/bookings",
+                       property_id: 10,
+                       start_date: "2023-04-18",
+                       end_date: "2023-04-20",
+                       approved: false)
+      #check200
+      expect(Booking.last.property_id).to eq(10)
+      expect(Booking.last.start_date.to_s).to eq("2023-04-18")
+      expect(Booking.last.end_date.to_s).to eq("2023-04-20")
+      expect(Booking.last.approved).to eq(false)
+      expect(Avail.all.length).to eq 21
+      expect(Avail.where(["property_id = ? and start_date = ? and end_date = ?", 10, "2023-03-15".to_date, "2023-04-17".to_date])).not_to eq nil
+      # expect(Avail.find(property_id: 10, start_date: "2023-04-21".to_date, end_date: "2023-05-24".to_date))
+    end
+
+    it "returns logged in error page if user is not signed in" do
+      sign_up
+      @response = post("/bookings",
+                       property_id: 10,
+                       start_date: "2023-04-01",
+                       end_date: "2023-04-03",
+                       approved: false)
+      check400
+      expect(Booking.last.id).to eq(10)
+      expect(@response.body).to include ("Log In Error")
+    end
+
+    it "date booked overlaps with another booking" do
+      sign_up
+      login
+      post("/bookings",
+           property_id: 4,
+           start_date: "2023-04-01",
+           end_date: "2023-04-03",
+           approved: false)
+      @response = post("/bookings",
+                       property_id: 4,
+                       start_date: "2023-04-01",
+                       end_date: "2023-04-03",
+                       approved: false)
+      expect(@response.status).to eq 302
     end
   end
 end
