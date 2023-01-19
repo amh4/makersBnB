@@ -11,14 +11,17 @@
       <p>
       <%= @property.daily_rate %>
     </p>
-      <p>
-      <%= @property.first_available %>
-    </p>
-      <p>
-      <%= @property.last_available %>
-    </p>
 
-<form method="POST" action="/your-bookings"> <!-- unsure where to post info to -->
+
+    <p>
+     <%= @property.id %>
+    </p>
+  <% if @try_again %>
+  <p>
+  This property is unavailable on the dates you selected
+  </p>
+  <% end %>
+<form method="POST" action="/bookings?property_id=<%= @property.id %>"> 
       <div>
         <label>When would you like to book from</label>
         <input type="date" name="start_date" />
@@ -26,8 +29,8 @@
       <div>
         <label>When would you like to book to</label>
         <input type="date" name="end_date" />
+        <input type="submit" value="Request Booking">
       </div>
-        <input type="submit" />      
   </body>
 </form>
 </html>

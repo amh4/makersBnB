@@ -6,8 +6,6 @@ class CreatePropertiesTable < ActiveRecord::Migration[7.0]
       t.string :address
       t.text :description
       t.integer :daily_rate
-      t.date :first_available
-      t.date :last_available
     end
   end
 end
