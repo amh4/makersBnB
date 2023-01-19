@@ -63,7 +63,7 @@ describe "MakersBnB" do
 
   context "booking page tests" do
     it "contains the property information" do
-      @response = get("/1")
+      @response = get("/property/1")
       expect(@response.body).to include "K12"
       expect(@response.body).to include ("Chuck Norris doesn't delete files, he blows them away.")
       expect(@response.body).to include ("93")
@@ -107,6 +107,7 @@ describe "MakersBnB" do
       @response = get("/bookings")
       check200
       expect(@response.body).to include "<h1>Your Bookings</h1>"
+
     end
   end
 
@@ -131,6 +132,17 @@ describe "MakersBnB" do
       @response = sign_up
       check400
       expect(@response.body).to include "Email address already in use."
+    end
+  end
+#### TEST IS DEPENDENT ON OTHER BRANCH. METHOD DOES WORK IN LOCAL HOST
+  # context "get /bookings" do
+  # end
+
+  context "GET /account" do
+    it "returns a page containing your bookings that need to be approved" do
+      post("/log-in?email=adam.hoar@icloud.com&password=password")
+      @response = get('/account')
+      expect(@response.body).to include('Baltoro Kangri')
     end
   end
 end

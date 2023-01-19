@@ -19,7 +19,7 @@
       <% @requests.each do |request| %>
       <%= request.title %>
       <%= request.description %>
-       <%= request.daily_rate %>
+      <%= request.daily_rate %>
 
       <form action="/approve-reject/<%= request.id %>&<%= true %>" method="post">
         <label>Approve</label>

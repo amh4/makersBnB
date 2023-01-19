@@ -51,12 +51,8 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/bookings" do
-    #   return ""
-    # else
-    #   #      @properties = Property.joins(:bookings).select("bookings.*, properties.*").where("user_id" => session[:user_id])
-    #   @properties = Booking.joins(:property).select("bookings.*, properties.*").where("user_id" => session[:user_id])
-    #   erb(:bookings)
-    # end
+    @properties = Booking.joins(:property).select("bookings.*, properties.*").where("user_id" => session[:user_id])
+    erb(:bookings)
   end
 
   post "/log-in" do
@@ -75,7 +71,6 @@ class MakersBnB < Sinatra::Base
   end
 
   post "/bookings" do
-    # way to obtain property id is incomplete and we have requested user to input this as temp workaround
     return login_fail unless logged_in
     booking = Booking.create(user_id: session[:user_id], property_id: params[:property_id],
                              start_date: params[:start_date], end_date: params[:end_date], approved: false, responded: false)
