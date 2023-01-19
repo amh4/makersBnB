@@ -162,3 +162,4 @@ class MakersBnB < Sinatra::Base
     params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
   end
 end
+

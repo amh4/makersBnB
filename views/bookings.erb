@@ -3,12 +3,15 @@
   <body>
     <h1>Your Bookings</h1>
     <div>
-    <% @properties.each do |property|%>
+    <% @trips.each do |trip|%>
       <p>
-      <%= property.title %>
+      Your trip to <%= trip.title %> starts on <%= trip.start_date %> and ends on <%= trip.end_date %> 
       </p>
       <p>
-        <%= property.description %>
+      Here's the the description of <%= trip.title %>:
+      </p>
+      <p>
+        <%= trip.description %>
       </p>
     <% end %>
     </div>

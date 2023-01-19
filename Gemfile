@@ -23,3 +23,7 @@ gem "pg", "~> 1.4"
 gem "faker", "~> 3.1"
 
 gem "simple_calendar", "~> 2.4"
+
+gem "database_cleaner-active_record", "~> 2.0"
+
+gem "date", "~> 3.3"
