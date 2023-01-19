@@ -6,10 +6,12 @@ require "sinatra/activerecord"
 require "bcrypt"
 require "simple_calendar"
 require "date"
+require "pony"
 require_relative "lib/booking"
 require_relative "lib/property"
 require_relative "lib/user"
 require_relative "lib/availability"
+require_relative "lib/mail"
 
 class MakersBnB < Sinatra::Base
   enable :sessions
@@ -117,6 +119,8 @@ class MakersBnB < Sinatra::Base
     encrypted_password = BCrypt::Password.create(params[:password])
     @user = User.create(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], password_digest: encrypted_password)
     if @user.errors.empty?
+      a = EmailTag.new
+      a.send(params[:email], "testing", "testing")
       return erb(:sign_up_confirmation)
     else
       status 400
@@ -162,4 +166,3 @@ class MakersBnB < Sinatra::Base
     params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
   end
 end
-
