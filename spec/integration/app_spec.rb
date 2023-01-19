@@ -70,7 +70,7 @@ describe "MakersBnB" do
     end
   end
 
-  context "booking page tests" do
+  context "GET /property/:id" do
     it "contains the property information" do
       @response = get("/property/1")
       expect(@response.body).to include "K12"

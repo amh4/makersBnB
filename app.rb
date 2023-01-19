@@ -62,7 +62,7 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/add-a-space" do
-    return erb(:add_a_space) if logged_in
+    logged_in ? erb(:add_a_space) : erb(:log_in_error)
   end
 
   post "/add-a-space" do
