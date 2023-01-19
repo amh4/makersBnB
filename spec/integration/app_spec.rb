@@ -41,6 +41,15 @@ describe "MakersBnB" do
       expect(@response.body).to include "Click to login"
     end
 
+    it "logs out if logout is pressed" do
+      sign_up
+      login
+      get("/log-out")
+      @response = get("/")
+      check200
+      expect(@response.body).to include "Click to login"
+    end
+
     it "has logout button if logged in" do
       sign_up
       login
@@ -131,6 +140,39 @@ describe "MakersBnB" do
     end
   end
 
+  context "GET /add-a-space" do
+    it "returns nothing if not logged in" do
+      @response = get("/add-a-space")
+      check200
+      expect(@response.body).to include ""
+    end
+    it "returns add a space forms if logged in" do
+      sign_up
+      login
+      @response = get("/add-a-space")
+      check200
+      expect(@response.body).to include ('<input type="text" name="title" />')
+      expect(@response.body).to include ('<input type="text" name="address" />')
+      expect(@response.body).to include ('<input type="text" name="description" />')
+      expect(@response.body).to include ('<input type="number" name="daily_rate" />')
+      expect(@response.body).to include ('<input type="date" name="first_available" />')
+      expect(@response.body).to include ('<input type="date" name="last_available" />')
+      expect(@response.body).to include ('<input type="submit" value="Submit the form" />')
+    end
+  end
+
+  context "POST /add-a-space" do
+    it "creates a property that can be viewed on the hompepage" do
+      sign_up
+      login
+      post("/add-a-space?title=Snowden&address=Excelsior Rd, Western Ave, Cardiff CF14 3AT&description=Time waits for no man.
+         Unless that man is Chuck Norris.&daily_rate=100&first_available=2023-01-18&last_available=2023-04-30")
+      @response = get("/")
+      check200
+      expect(@response.body).to include "Snowden"
+    end
+  end
+
   context "GET /property/:id" do
     it "gets booking page for property with :id" do
       @response = get("/property/1")
@@ -188,7 +230,6 @@ describe "MakersBnB" do
                        end_date: "2023-04-03",
                        approved: false)
       expect(@response.status).to eq 302
-
     end
   end
 end

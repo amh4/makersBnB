@@ -40,6 +40,25 @@ class MakersBnB < Sinatra::Base
     end
   end
 
+  get "/log-out" do
+    session.clear
+    redirect "/"
+  end
+
+  get "/add-a-space" do
+    return erb(:add_a_space) if logged_in
+  end
+
+  post "/add-a-space" do
+    if logged_in
+      property = Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], description: params[:description], daily_rate: params[:daily_rate])
+      Avail.create(property_id: property.id, first_available: params[:first_available], last_available: params[:last_available])
+      redirect back
+    else
+      redirect ("/")
+    end
+  end
+
   post "/bookings" do
     return login_fail unless logged_in
     availabilities = Avail.where("property_id = ?", params[:property_id])
