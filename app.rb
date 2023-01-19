@@ -31,10 +31,6 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in)
   end
 
-  get "/sign_up" do
-    return erb(:sign_up)
-  end
-
   get "/bookings" do
     if session[:user_id].nil?
       return ""
@@ -130,21 +126,13 @@ class MakersBnB < Sinatra::Base
 
   def availability_updater(date)
     if params[:start_date].to_date > date.first_available && params[:end_date].to_date < date.last_available
-      new_first1 = date.first_available
-      new_last1 = params[:start_date].to_date.prev_day
-      Avail.create(property_id: params[:property_id], first_available: new_first1, last_available: new_last1)
-      new_first2 = params[:end_date].to_date.next_day
-      new_last2 = date.last_available
-      Avail.create(property_id: params[:property_id], first_available: new_first2, last_available: new_last2)
+      Avail.create(property_id: params[:property_id], first_available: date.first_available, last_available: params[:start_date].to_date.prev_day)
+      Avail.create(property_id: params[:property_id], first_available: params[:end_date].to_date.next_day, last_available: date.last_available)
     elsif params[:start_date].to_date == date.first_available && params[:end_date].to_date == date.last_available
     elsif params[:start_date].to_date == date.first_available
-      new_first = date.first_available
-      new_last = params[:end_date].to_date.next_day
-      Avail.create(property_id: params[:property_id], first_available: new_first, last_available: new_last)
+      Avail.create(property_id: params[:property_id], first_available: date.first_available, last_available: params[:end_date].to_date.next_day)
     elsif params[:end_date].to_date == date.last_available
-      new_first = date.first_available
-      new_last = params[:start_date].to_date.prev_day
-      Avail.create(property_id: params[:property_id], first_available: new_first, last_available: new_last)
+      Avail.create(property_id: params[:property_id], first_available: date.first_available, last_available: params[:start_date].to_date.prev_day)
     end
     Avail.find(date.id).destroy
   end
