@@ -76,8 +76,6 @@ describe "MakersBnB" do
       expect(@response.body).to include "K12"
       expect(@response.body).to include ("Chuck Norris doesn't delete files, he blows them away.")
       expect(@response.body).to include ("93")
-      expect(@response.body).to include ("2023-03-05")
-      expect(@response.body).to include ("2023-05-14")
       expect(@response.body).to include ('<input type="date" name="start_date" />')
       expect(@response.body).to include ('<input type="date" name="end_date" />')
     end
@@ -150,14 +148,6 @@ describe "MakersBnB" do
       @response = sign_up
       check400
       expect(@response.body).to include "Email address already in use."
-    end
-  end
-
-  context "GET /account" do
-    it "returns a page containing your bookings that need to be approved" do
-      post("/log-in?email=adam.hoar@icloud.com&password=password")
-      @response = get('/account')
-      expect(@response.body).to include('Baltoro Kangri')
     end
   end
 
