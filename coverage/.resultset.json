@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/adam/Desktop/web/engineering-project-1/spec/integration/app_spec.rb": {
+      "/Users/orhankhanbayov/Projects/Makers Course/Week 5/engineering-project-1/spec/integration/app_spec.rb": {
         "lines": [
           1,
           1,
@@ -252,6 +252,6 @@
         ]
       }
     },
-    "timestamp": 1674140455
+    "timestamp": 1674161955
   }
 }
