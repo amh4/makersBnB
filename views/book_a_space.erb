@@ -1,6 +1,15 @@
 <html>
-  <head>Book a space</head>
+  <head>
+    <link rel="stylesheet" type="text/css" href="<%= url("/style.css")%>">
+  </head>
   <body>
+     <div class="navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/log-out">Logout</a></li>
+          <li><a href="/account">Manage Account</a></li>
+        </ul>
+        </div>
     <h1>Book a space</h1>
     <p>
       <%= @property.title %>
@@ -9,12 +18,10 @@
       <%= @property.description %>
     </p>
       <p>
-      <%= @property.daily_rate %>
+      $<%= @property.daily_rate %> per night
     </p>
-
-
     <p>
-     <%= @property.id %>
+     <% @property.id %>
     </p>
   <% if @try_again %>
   <p>
@@ -29,7 +36,8 @@
       <div>
         <label>When would you like to book to</label>
         <input type="date" name="end_date" />
-        <input type="submit" value="Request Booking">
+        <br>
+        <br><input type="submit" value="Request Booking">
       </div>
   </body>
 </form>

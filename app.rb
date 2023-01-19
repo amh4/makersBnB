@@ -102,7 +102,7 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in_error) if user.nil?
     if user.authenticate(password)
       session[:user_id] = user.id
-      return erb(:logged_in)
+      redirect "/"
     else
       status 400
       return erb(:log_in_error)
