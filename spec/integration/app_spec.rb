@@ -144,7 +144,7 @@ describe "MakersBnB" do
   end
 
   context "POST /bookings" do
-    it "adds users booking to the bookings table" do
+    it "adds users booking to the bookings table, two new availabilities should be created, one destroyed" do
       sign_up
       login
       @response = post("/bookings",
@@ -157,6 +157,9 @@ describe "MakersBnB" do
       expect(Booking.last.start_date.to_s).to eq("2023-04-18")
       expect(Booking.last.end_date.to_s).to eq("2023-04-20")
       expect(Booking.last.approved).to eq(false)
+      expect(Avail.all.length).to eq 21
+      expect(Avail.where(["property_id = ? and start_date = ? and end_date = ?", 10, "2023-03-15".to_date, "2023-04-17".to_date])).not_to eq nil
+      # expect(Avail.find(property_id: 10, start_date: "2023-04-21".to_date, end_date: "2023-05-24".to_date))
     end
 
     it "returns logged in error page if user is not signed in" do
@@ -185,6 +188,7 @@ describe "MakersBnB" do
                        end_date: "2023-04-03",
                        approved: false)
       expect(@response.status).to eq 302
+
     end
   end
 end

@@ -117,6 +117,7 @@ class MakersBnB < Sinatra::Base
       new_first2 = params[:end_date].to_date.next_day
       new_last2 = date.last_available
       Avail.create(property_id: params[:property_id], first_available: new_first2, last_available: new_last2)
+    elsif params[:start_date].to_date == date.first_available && params[:end_date].to_date == date.last_available
     elsif params[:start_date].to_date == date.first_available
       new_first = date.first_available
       new_last = params[:end_date].to_date.next_day
@@ -128,6 +129,7 @@ class MakersBnB < Sinatra::Base
     end
     Avail.find(date.id).destroy
   end
+
 
   def compatible(availability)
     params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
