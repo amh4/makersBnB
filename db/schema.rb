@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_16_145950) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_18_204242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "avails", force: :cascade do |t|
+    t.bigint "property_id"
+    t.date "first_available"
+    t.date "last_available"
+    t.index ["property_id"], name: "index_avails_on_property_id"
+  end
 
   create_table "bookings", force: :cascade do |t|
     t.bigint "user_id"
@@ -30,8 +37,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_145950) do
     t.string "address"
     t.text "description"
     t.integer "daily_rate"
-    t.date "first_available"
-    t.date "last_available"
     t.index ["user_id"], name: "index_properties_on_user_id"
   end
 
@@ -42,6 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_145950) do
     t.string "password_digest"
   end
 
+  add_foreign_key "avails", "properties"
   add_foreign_key "bookings", "properties"
   add_foreign_key "bookings", "users"
   add_foreign_key "properties", "users"
