@@ -46,12 +46,12 @@ class MakersBnB < Sinatra::Base
 
   post "/bookings" do
     return login_fail unless logged_in
-    availability = Avail.where("property_id = ?", params[:property_id])
-    availability.each do |date|
-      if params[:start_date].to_date >= date.first_available && params[:end_date].to_date <= date.last_available
+    availabilities = Avail.where("property_id = ?", params[:property_id])
+    availabilities.each do |availability|
+      if compatible(availability)
         Booking.create(user_id: session[:user_id], property_id: params[:property_id],
                        start_date: params[:start_date], end_date: params[:end_date], approved: false)
-        availability_updater(date)
+        availability_updater(availability)
         return erb(:booking_confirmation)
       end
     end
@@ -127,5 +127,9 @@ class MakersBnB < Sinatra::Base
       Avail.create(property_id: params[:property_id], first_available: new_first, last_available: new_last)
     end
     Avail.find(date.id).destroy
+  end
+
+  def compatible(availability)
+    params[:start_date].to_date >= availability.first_available && params[:end_date].to_date <= availability.last_available
   end
 end
