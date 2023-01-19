@@ -28,3 +28,7 @@ gem "database_cleaner-active_record", "~> 2.0"
 
 gem "date", "~> 3.3"
 gem "pony", "~> 1.13"
+
+gem "mail", "~> 2.8"
+
+gem "rspec", "~> 3.12"
