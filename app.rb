@@ -36,15 +36,11 @@ class MakersBnB < Sinatra::Base
   end
 
   post "/approve-reject/:id&:bool" do
-    if params[:bool] == "true"
-      booking = Booking.find(params[:id].to_i)
-      booking.responded = true
-      booking.save
-    else
-      booking = Booking.find(params[:id].to_i)
-      booking.responded = false
-      booking.save
-    end
+    booking = Booking.find(params[:id].to_i)
+    booking.responded = true
+    booking.approved = params[:bool] == "true" ? true : false
+    booking.save
+    redirect("/account")
   end
 
   get "/bookings" do
@@ -76,7 +72,13 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/account" do
-    @requests = Booking.joins(:property).select("bookings.*, properties.*").where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    @requests = Booking.joins(:property).select(
+      "bookings.id",
+      "properties.title",
+      "properties.description",
+      "properties.daily_rate"
+      ).where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    binding.irb
     return erb(:account_page)
   end
 
