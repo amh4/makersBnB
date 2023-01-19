@@ -76,7 +76,8 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/account" do
-    @requests = Booking.joins(:property).select("bookings.*, properties.*").where(["bookings.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    @requests = Booking.joins(:property).select("bookings.*, properties.*").where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    binding.irb
     return erb(:account_page)
   end
 
