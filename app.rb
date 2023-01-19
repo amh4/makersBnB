@@ -55,7 +55,8 @@ class MakersBnB < Sinatra::Base
 
   post "/add-a-space" do
     if logged_in
-      Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], description: params[:description], daily_rate: params[:daily_rate], first_available: params[:first_available], last_available: params[:last_available])
+      property = Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], description: params[:description], daily_rate: params[:daily_rate])
+      Avail.create(property_id: property.id, first_available: params[:first_available], last_available: params[:last_available])
       redirect back
     else
       redirect ("/")
