@@ -78,6 +78,16 @@ describe "MakersBnB" do
     end
   end
 
+  context "booking page tests" do
+    it "contains the property information" do
+      @response = get("/property/1")
+      expect(@response.body).to include "K12"
+      expect(@response.body).to include ("Chuck Norris doesn't delete files, he blows them away.")
+      expect(@response.body).to include ("93")
+      expect(@response.body).to include ('<input type="date" name="start_date" />')
+      expect(@response.body).to include ('<input type="date" name="end_date" />')
+    end
+  end
 
   context "GET /log-in" do
     it "returns the html form to log in" do
@@ -170,6 +180,7 @@ describe "MakersBnB" do
       expect(@response.body).to include('Snowden')
     end
   end
+
 
   context "GET /add-a-space" do
     it "returns nothing if not logged in" do

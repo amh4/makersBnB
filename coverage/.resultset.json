@@ -2,6 +2,7 @@
   "RSpec": {
     "coverage": {
       "/Users/tmccoy99/engineering-project-1/spec/integration/app_spec.rb": {
+
         "lines": [
           1,
           1,
@@ -11,6 +12,7 @@
           1,
           1,
           24,
+          23,
           null,
           1,
           11,
@@ -81,6 +83,17 @@
           1,
           1,
           null,
+          null,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
           null,
           null,
           null,

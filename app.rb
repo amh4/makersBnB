@@ -78,7 +78,7 @@ class MakersBnB < Sinatra::Base
       "properties.description",
       "properties.daily_rate"
       ).where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
-    binding.irb
+
     return erb(:account_page)
   end
 
