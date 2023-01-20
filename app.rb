@@ -43,11 +43,20 @@ class MakersBnB < Sinatra::Base
     property = Property.find(booking.property_id)
     user = User.find(booking.user_id)
     notification = EmailTag.new
+    params[:start_date], params[:end_date] = booking.start_date, booking.end_date
+    params[:property_id] = property.id
     if params[:bool] == "true"
       booking.approved = true
       renter = User.find(property.user_id)
       notification.send(user.email, "Request accepted", "Your request for #{property.title} from the #{booking.start_date} to the #{booking.end_date} has been accepted by the host.")
       notification.send(renter.email, "Confirmed a request", "You have confirmed a request for #{property.title} from the #{booking.start_date} to the #{booking.end_date}.")
+      availabilities = Avail.where("property_id = ?", params[:property_id])
+      availabilities.each do |availability|
+        if compatible(availability)
+          availability_updater(availability)
+          break
+        end
+      end
     else
       notification.send(user.email, "Request denied", "Your request for #{property.title} from the #{booking.start_date} to the #{booking.end_date} has been rejected by the host.")
       booking.approved = false
@@ -107,7 +116,6 @@ class MakersBnB < Sinatra::Base
         Booking.create(user_id: session[:user_id], property_id: params[:property_id],
                        start_date: params[:start_date], end_date: params[:end_date],
                        approved: false, responded: false)
-        availability_updater(availability)
         property = Property.find(params[:property_id])
         user = User.find(session[:user_id])
         notification = EmailTag.new

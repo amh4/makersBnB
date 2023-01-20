@@ -235,8 +235,6 @@ describe "MakersBnB" do
       expect(Booking.last.start_date.to_s).to eq("2023-04-18")
       expect(Booking.last.end_date.to_s).to eq("2023-04-20")
       expect(Booking.last.approved).to eq(false)
-      expect(Avail.all.length).to eq 21
-      expect(Avail.where(["property_id = ? and start_date = ? and end_date = ?", 10, "2023-03-15".to_date, "2023-04-17".to_date])).not_to eq nil
       # expect(Avail.find(property_id: 10, start_date: "2023-04-21".to_date, end_date: "2023-05-24".to_date))
     end
 
@@ -258,13 +256,12 @@ describe "MakersBnB" do
       post("/bookings",
            property_id: 4,
            start_date: "2023-04-01",
-           end_date: "2023-04-03",
-           approved: false)
+           end_date: "2023-04-03")
+      post("/approve-reject/#{Booking.last.id}&true")
       @response = post("/bookings",
                        property_id: 4,
                        start_date: "2023-04-01",
-                       end_date: "2023-04-03",
-                       approved: false)
+                       end_date: "2023-04-03")
       expect(@response.status).to eq 302
     end
   end
@@ -283,12 +280,15 @@ describe "MakersBnB" do
            start_date: "2023-04-18",
            end_date: "2023-04-20",
            approved: false)
+      expect(Avail.all.length).to eq 21
       get("/log-out")
       login
       @response = post("/approve-reject/#{Booking.last.id}&true")
       expect(@response.status).to eq 302
       expect(Booking.last.approved).to eq true
       expect(Booking.last.responded).to eq true
+      expect(Avail.all.length).to eq 22
+      expect(Avail.where(["property_id = ? and start_date = ? and end_date = ?", 10, "2023-03-15".to_date, "2023-04-17".to_date])).not_to eq nil
     end
   end
 end
