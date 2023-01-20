@@ -1,5 +1,6 @@
+
 <html>
-  <head><link rel="stylesheet" type="text/css" href="<%= url("/style.css")%>"></head>
+  <head><link rel="stylesheet" type="text/css" href="<%= url("/homepage.css") %>"></head>
   <body>
     <ul>
       <% if @a == true %>
@@ -20,8 +21,13 @@
     <% else %>
     <% end %>
 
+    <% counter = 0 %>
     <div class="container">
       <% @properties.each do |property| %>
+          <% counter += 1 %>
+  <div class="imgposition">
+    <img id="drag1" src="/images/image<%= counter %>.png"  width="450" height="400">
+  </div>
       <a href="/property/<%= property.id %>"><%= property.title %> <br> $<%= property.daily_rate %></a>
       <% end %>
     </div>
