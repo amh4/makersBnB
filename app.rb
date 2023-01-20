@@ -174,6 +174,7 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/property/:id" do
+    redirect "/log-in" unless logged_in
     @try_again = params[:try_again]
     @property = Property.find(params[:id])
     @dates = Avail.where("property_id = ?", params[:id])
