@@ -41,7 +41,7 @@ class MakersBnB < Sinatra::Base
     booking = Booking.find(params[:id].to_i)
     booking.responded = true
     property = Property.find(booking.property_id)
-    user = User.find(booking.user_id
+    user = User.find(booking.user_id)
     notification = EmailTag.new
     if params[:bool] == "true"
       booking.approved = true

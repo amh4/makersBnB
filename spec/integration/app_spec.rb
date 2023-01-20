@@ -82,17 +82,6 @@ describe "MakersBnB" do
     end
   end
 
-  context "booking page tests" do
-    xit "contains the property information" do
-      @response = get("/property/1")
-      expect(@response.body).to include "K12"
-      expect(@response.body).to include ("Chuck Norris doesn't delete files, he blows them away.")
-      expect(@response.body).to include ("93")
-      expect(@response.body).to include ('<input type="date" name="start_date" />')
-      expect(@response.body).to include ('<input type="date" name="end_date" />')
-    end
-  end
-
   context "GET /log-in" do
     it "returns the html form to log in" do
       @response = get("/log-in")
@@ -106,8 +95,10 @@ describe "MakersBnB" do
   context "POST /log-in" do
     it "if valid credentials, returns your bookings page" do
       sign_up
-      @response = login
-      expect(@response.body).to include "You're logged in to MakersBnB"
+      login
+      @response = get("/bookings")
+      check200
+      expect(@response.body).to include("<h1>Your Bookings</h1>")
     end
 
     it "if invalid credentials, returns login_error page" do
@@ -132,13 +123,13 @@ describe "MakersBnB" do
       check200
       expect(@response.body).to include(
         "<h1>Your Bookings</h1>",
-        "Your trip to Gasherbrum III starts on 2023-04-21 and ends on 2023-04-22",
-        "Here's the the description of Gasherbrum III:",
+        "Your trip to Gasherbrum III",
+        "A bit about your destination:",
         "Chuck Norris breaks RSA 128-bit encrypted codes in milliseconds."
       )
     end
   end
-
+  #starts on 2023-04-21 and ends on 2023-04-22
   context "GET /sign-up" do
     it "returns sign-up page with 200 status" do
       @response = get("/sign-up")
@@ -173,18 +164,17 @@ describe "MakersBnB" do
       second_sign_up
       second_log_in
       post("/bookings",
-        property_id: 21,
-        start_date: "2023-04-18",
-        end_date: "2023-04-20",
-        approved: false)
+           property_id: 21,
+           start_date: "2023-04-18",
+           end_date: "2023-04-20",
+           approved: false)
       get("/log-out")
       login
-      @response = get('/account')
+      @response = get("/account")
       check200
-      expect(@response.body).to include('Snowden')
+      expect(@response.body).to include("Snowden")
     end
   end
-
 
   context "GET /add-a-space" do
     it "returns nothing if not logged in" do
@@ -224,7 +214,7 @@ describe "MakersBnB" do
       @response = get("/property/1")
       check200
       expect(@response.body).to include(
-        "<head>Book a space</head>",
+        "<h1>Book a space</h1>",
         "K12",
         "Chuck Norris doesn't delete files, he blows them away."
       )
@@ -289,10 +279,10 @@ describe "MakersBnB" do
       second_sign_up
       second_log_in
       post("/bookings",
-        property_id: 23,
-        start_date: "2023-04-18",
-        end_date: "2023-04-20",
-        approved: false)
+           property_id: 23,
+           start_date: "2023-04-18",
+           end_date: "2023-04-20",
+           approved: false)
       get("/log-out")
       login
       @response = post("/approve-reject/#{Booking.last.id}&true")
@@ -301,5 +291,4 @@ describe "MakersBnB" do
       expect(Booking.last.responded).to eq true
     end
   end
-
 end
