@@ -78,7 +78,7 @@ class MakersBnB < Sinatra::Base
       "properties.title",
       "properties.description",
       "properties.daily_rate"
-      ).where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    ).where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
 
     return erb(:account_page)
   end
@@ -90,7 +90,7 @@ class MakersBnB < Sinatra::Base
       if compatible(availability)
         Booking.create(user_id: session[:user_id], property_id: params[:property_id],
                        start_date: params[:start_date], end_date: params[:end_date],
-                      approved: false, responded: false)
+                       approved: false, responded: false)
         availability_updater(availability)
         return erb(:booking_confirmation)
       end
