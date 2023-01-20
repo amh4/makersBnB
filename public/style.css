@@ -48,3 +48,8 @@ h2 {
   padding: 20px;
 }
 
+.add-another-space{
+  border: 2px;
+  border-radius: 20px;
+  border-color: white;
+}
