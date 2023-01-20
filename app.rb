@@ -38,25 +38,22 @@ class MakersBnB < Sinatra::Base
   end
 
   post "/approve-reject/:id&:bool" do
+    booking = Booking.find(params[:id].to_i)
+    booking.responded = true
+    property = Property.find(booking.property_id)
+    user = User.find(booking.user_id
+    notification = EmailTag.new
     if params[:bool] == "true"
-      booking = Booking.find(params[:id].to_i)
-      booking.responded = true
-      booking.save
-      user = User.find(booking.user_id)
-      property = Property.find(booking.property_id)
+      booking.approved = true
       renter = User.find(property.user_id)
-      notification = EmailTag.new
       notification.send(user.email, "Request accepted", "Your request for #{property.title} from the #{booking.start_date} to the #{booking.end_date} has been accepted by the host.")
       notification.send(renter.email, "Confirmed a request", "You have confirmed a request for #{property.title} from the #{booking.start_date} to the #{booking.end_date}.")
     else
-      booking = Booking.find(params[:id].to_i)
-      booking.responded = false
-      booking.save
-      user = User.find(booking.user_id)
-      property = Property.find(booking.property_id)
-      notification = EmailTag.new
       notification.send(user.email, "Request denied", "Your request for #{property.title} from the #{booking.start_date} to the #{booking.end_date} has been rejected by the host.")
+      booking.approved = false
     end
+    booking.save
+    redirect("/account")
   end
 
   get "/bookings" do
@@ -74,7 +71,7 @@ class MakersBnB < Sinatra::Base
   end
 
   get "/add-a-space" do
-    return erb(:add_a_space) if logged_in
+    logged_in ? erb(:add_a_space) : erb(:log_in_error)
   end
 
   post "/add-a-space" do
@@ -84,14 +81,21 @@ class MakersBnB < Sinatra::Base
       user = User.find(session[:user_id])
       notification = EmailTag.new
       notification.send(user.email, "Added a space", "You have listed #{params[:title]} for £#{params[:daily_rate]} per night, from the #{params[:first_available]} to the #{params[:last_available]}.")
-      redirect back
+      p = Property.all.last
+      redirect "/add-availability/#{p.id}"
     else
-      redirect ("/")
+      redirect "/"
     end
   end
 
   get "/account" do
-    @requests = Booking.joins(:property).select("bookings.*, properties.*").where(["bookings.user_id = ? and bookings.responded = ?", session[:user_id], false])
+    @requests = Booking.joins(:property).select(
+      "bookings.id",
+      "properties.title",
+      "properties.description",
+      "properties.daily_rate"
+    ).where(["properties.user_id = ? and bookings.responded = ?", session[:user_id], false])
+
     return erb(:account_page)
   end
 
@@ -101,7 +105,8 @@ class MakersBnB < Sinatra::Base
     availabilities.each do |availability|
       if compatible(availability)
         Booking.create(user_id: session[:user_id], property_id: params[:property_id],
-                       start_date: params[:start_date], end_date: params[:end_date], approved: false)
+                       start_date: params[:start_date], end_date: params[:end_date],
+                       approved: false, responded: false)
         availability_updater(availability)
         property = Property.find(params[:property_id])
         user = User.find(session[:user_id])
@@ -117,6 +122,17 @@ class MakersBnB < Sinatra::Base
     redirect("/property/#{params[:property_id]}?try_again=true")
   end
 
+  get "/add-availability/:id" do
+    @p = Property.find(params[:id])
+    return erb(:add_availability)
+  end
+
+  post "/add-availability/:id" do
+    return login_fail unless logged_in
+    Avail.create(property_id: params[:id], first_available: params[:first_available], last_available: params[:last_available])
+    redirect back
+  end
+
   post "/log-in" do
     email = params[:email]
     password = params[:password]
@@ -125,7 +141,7 @@ class MakersBnB < Sinatra::Base
     return erb(:log_in_error) if user.nil?
     if user.authenticate(password)
       session[:user_id] = user.id
-      return erb(:logged_in)
+      redirect "/"
     else
       status 400
       return erb(:log_in_error)
@@ -152,6 +168,8 @@ class MakersBnB < Sinatra::Base
   get "/property/:id" do
     @try_again = params[:try_again]
     @property = Property.find(params[:id])
+    @dates = Avail.where("property_id = ?", params[:id])
+
     return erb(:book_a_space)
   end
 

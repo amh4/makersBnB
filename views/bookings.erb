@@ -1,18 +1,23 @@
 <html>
-  <head>Your Bookings</head>
+  <head><link rel="stylesheet" type="text/css" href="<%= url("/style.css")%>"></head>
   <body>
+   <div class="navigation">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/log-out">Logout</a></li>
+      <li><a href="/account">Manage Account</a></li>
+    </ul>
+  </div>
+
+
     <h1>Your Bookings</h1>
-    <div>
+    <div class="container">
     <% @trips.each do |trip|%>
-      <p>
-      Your trip to <%= trip.title %> starts on <%= trip.start_date %> and ends on <%= trip.end_date %> 
-      </p>
-      <p>
-      Here's the the description of <%= trip.title %>:
-      </p>
-      <p>
-        <%= trip.description %>
-      </p>
+      Your trip to <%= trip.title %> 
+      <br>Starts on <%= trip.start_date %> 
+      <br>Ends on <%= trip.end_date %> 
+      <br>A bit about your destination <%= trip.title %>:
+      <br><%= trip.description %>
     <% end %>
     </div>
 
