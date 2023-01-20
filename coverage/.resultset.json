@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/orhankhanbayov/Projects/Makers Course/Week 5/engineering-project-1/spec/email_spec.rb": {
+      "/Users/tmccoy99/engineering-project-1/spec/email_spec.rb": {
         "lines": [
           1,
           1,
@@ -37,7 +37,7 @@
           null
         ]
       },
-      "/Users/orhankhanbayov/Projects/Makers Course/Week 5/engineering-project-1/spec/integration/app_spec.rb": {
+      "/Users/tmccoy99/engineering-project-1/spec/integration/app_spec.rb": {
         "lines": [
           1,
           1,
@@ -336,6 +336,6 @@
         ]
       }
     },
-    "timestamp": 1674207618
+    "timestamp": 1674208102
   }
 }
