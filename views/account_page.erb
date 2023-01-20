@@ -1,25 +1,28 @@
 <html>
-  <head></head>
+  <head>
+    <link rel="stylesheet" type="text/css" href="<%= url("/style.css")%>">
+  </head>
   <body>
-    <h1>Account Management</h1>
       <div class="navigation">
         <ul>
-          <li><a href="/log_in">Click to login</a></li>
-          <li><a href="/logout">Click to logout</a></li>
-          <li><a href="/sign_up">Click to sign up</a></li>
-          <li><a href="/bookings">Click to view bookings</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/log-out">Logout</a></li>
+          <li><a href="/account">Manage Account</a></li>
+
         </ul>
         </div>
+    <h1>Account Management</h1>
 
-        <div>
-          <a href="/bookings">Your Bookings</a><br>
-        </div>
+<div class="float-container">
+      <div class="float-child">
+        <a href="/bookings">Your Bookings</a><br>
+      </div>
 
-    <div>
+    <div class="float-child">
       <% @requests.each do |request| %>
       <%= request.title %>
       <%= request.description %>
-      <%= request.daily_rate %>
+      $<%= request.daily_rate %> per day
 
       <form action="/approve-reject/<%= request.id %>&<%= true %>" method="post">
         <label>Approve</label>
@@ -31,5 +34,6 @@
       </form>
       <% end %>
     </div>
+  </div>
   </body>
 </html>
