@@ -3,9 +3,16 @@ require "simplecov-console"
 require "database_cleaner-active_record"
 require "rake"
 require "bcrypt"
+require "pony"
+
+require "mail"
 ENV["RACK_ENV"] = "test"
 
 require_relative "../app"
+
+Mail.defaults do
+  delivery_method :test
+end
 
 Rake.application.load_rakefile
 

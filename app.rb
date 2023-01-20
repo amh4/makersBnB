@@ -6,10 +6,12 @@ require "sinatra/activerecord"
 require "bcrypt"
 require "simple_calendar"
 require "date"
+require "pony"
 require_relative "lib/booking"
 require_relative "lib/property"
 require_relative "lib/user"
 require_relative "lib/availability"
+require_relative "lib/email"
 
 class MakersBnB < Sinatra::Base
   enable :sessions
@@ -38,7 +40,18 @@ class MakersBnB < Sinatra::Base
   post "/approve-reject/:id&:bool" do
     booking = Booking.find(params[:id].to_i)
     booking.responded = true
-    booking.approved = params[:bool] == "true" ? true : false
+    property = Property.find(booking.property_id)
+    user = User.find(booking.user_id
+    notification = EmailTag.new
+    if params[:bool] == "true"
+      booking.approved = true
+      renter = User.find(property.user_id)
+      notification.send(user.email, "Request accepted", "Your request for #{property.title} from the #{booking.start_date} to the #{booking.end_date} has been accepted by the host.")
+      notification.send(renter.email, "Confirmed a request", "You have confirmed a request for #{property.title} from the #{booking.start_date} to the #{booking.end_date}.")
+    else
+      notification.send(user.email, "Request denied", "Your request for #{property.title} from the #{booking.start_date} to the #{booking.end_date} has been rejected by the host.")
+      booking.approved = false
+    end
     booking.save
     redirect("/account")
   end
@@ -65,6 +78,9 @@ class MakersBnB < Sinatra::Base
     if logged_in
       property = Property.create(user_id: session[:user_id], title: params[:title], address: params[:address], description: params[:description], daily_rate: params[:daily_rate])
       Avail.create(property_id: property.id, first_available: params[:first_available], last_available: params[:last_available])
+      user = User.find(session[:user_id])
+      notification = EmailTag.new
+      notification.send(user.email, "Added a space", "You have listed #{params[:title]} for £#{params[:daily_rate]} per night, from the #{params[:first_available]} to the #{params[:last_available]}.")
       p = Property.all.last
       redirect "/add-availability/#{p.id}"
     else
@@ -92,6 +108,14 @@ class MakersBnB < Sinatra::Base
                        start_date: params[:start_date], end_date: params[:end_date],
                        approved: false, responded: false)
         availability_updater(availability)
+        property = Property.find(params[:property_id])
+        user = User.find(session[:user_id])
+        notification = EmailTag.new
+        notification.send(user.email, "Created a booking request", "You have made a booking request for #{property.title} from the #{params[:start_date]} to the #{params[:end_date]}. Please await approval from the host.")
+        renter = User.find(property.user_id)
+
+        notification.send(renter.email, "Booking request recieved", "You have recieved a booking request for #{property.title} from the #{params[:start_date]} to the #{params[:end_date]}. Please accept or reject the request.")
+
         return erb(:booking_confirmation)
       end
     end
@@ -132,6 +156,8 @@ class MakersBnB < Sinatra::Base
     encrypted_password = BCrypt::Password.create(params[:password])
     @user = User.create(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], password_digest: encrypted_password)
     if @user.errors.empty?
+      notification = EmailTag.new
+      notification.send(params[:email], "Sign up to MakersBnb", "Congratulations on signing up to MakersBnb.")
       return erb(:sign_up_confirmation)
     else
       status 400
