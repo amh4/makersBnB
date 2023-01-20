@@ -1,39 +1,40 @@
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="<%= url("/style.css")%>">
+    <link rel="stylesheet" type="text/css" href="<%= url("/account.css")%>">
   </head>
   <body>
       <div class="navigation">
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/log-out">Logout</a></li>
+          <li><a href="/bookings">Your Bookings</a></li>
           <li><a href="/account">Manage Account</a></li>
-
+          <li><a href="/log-out">Logout</a></li>
         </ul>
-        </div>
-    <h1>Account Management</h1>
-
-<div class="float-container">
-      <div class="float-child">
-        <a href="/bookings">Your Bookings</a><br>
       </div>
 
-    <div class="float-child">
-      <% @requests.each do |request| %>
-      <%= request.title %>
-      <%= request.description %>
-      $<%= request.daily_rate %> per day
+    <h1>Account Management</h1>
 
+  <% @requests.each do |request| %>
+    <div class="container">
+    <%= request.title %>
+    <%= request.description %>
+    $<%= request.daily_rate %> per day
+    <br>
+    <br>
+    <div class="approve_button">
       <form action="/approve-reject/<%= request.id %>&<%= true %>" method="post">
         <label>Approve</label>
         <input type="submit" name="approve" value="Approve">
       </form>
-       <form action="/approve-reject/<%= request.id %>&<%= false %>" method="post">
-        <label>Reject</label>
-        <input type="submit" name="reject" value="Reject">
-      </form>
-      <% end %>
+      </div>
+
+      <div class="reject_button">
+        <form action="/approve-reject/<%= request.id %>&<%= false %>" method="post">
+          <label>Reject</label>
+          <input type="submit" name="reject" value="Reject">
+        </form>
+      </div>
     </div>
-  </div>
+    <% end %>
   </body>
 </html>
