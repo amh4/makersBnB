@@ -1,5 +1,5 @@
 <html>
-  <head><link rel="stylesheet" type="text/css" href="<%= url("/style.css") %>"></head>
+  <head><link rel="stylesheet" type="text/css" href="<%= url("/bookings.css") %>"></head>
   <body>
    <div class="navigation">
     <ul>
@@ -9,17 +9,15 @@
     </ul>
   </div>
 
-
     <h1>Your Bookings</h1>
-    <div class="container">
-    <% @trips.each do |trip| %>
-      Your trip to <%= trip.title %> 
-      <br>Starts on <%= trip.start_date %> 
-      <br>Ends on <%= trip.end_date %> 
-      <br>A bit about your destination:
-      <br><%= trip.description %>
-    <% end %>
-    </div>
-
+      <% @trips.each do |trip| %>
+        <div class="container">
+          Your trip to <%= trip.title %> 
+          <br>Starts on <%= trip.start_date %> 
+          <br>Ends on <%= trip.end_date %> 
+          <br>A bit about your destination:
+          <br><%= trip.description %>
+        </div>
+      <% end %>
   </body>
 </html>

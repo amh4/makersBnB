@@ -36,15 +36,15 @@ h2 {
 }
 
 .container {
-  display: grid; 
+  display: inline; 
   grid-template-columns: auto; 
   grid-template-rows: auto; 
   gap: 100px 0px; 
-  grid-template-areas: 
+  /* grid-template-areas: 
     ". . ."
     ". . ."
     ". . ."; 
-  text-align: center;
+  text-align: center; */
   padding: 20px;
 }
 
@@ -52,4 +52,8 @@ h2 {
   border: 2px;
   border-radius: 20px;
   border-color: white;
+}
+.drag1{
+  height: 10px;
+  width: 20px;
 }
