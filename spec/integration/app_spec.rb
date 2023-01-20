@@ -23,6 +23,14 @@ describe "MakersBnB" do
     post("/log-in?email=orhan.khanbayov@hotmail.co.uk&password=mypassword")
   end
 
+  def second_sign_up
+    post("/sign-up?first_name=Finn&last_name=McCoy&email=finnmccoy99@gmail.com&password=mypassword")
+  end
+
+  def second_log_in
+    post("/log-in?email=finnmccoy99@gmail.com&password=mypassword")
+  end
+
   context "GET /" do
     it "returns homepage with status 200" do
       @response = get("/")
@@ -151,6 +159,29 @@ describe "MakersBnB" do
     end
   end
 
+  context "GET /account" do
+    it "returns a page containing your bookings that need to be approved" do
+      sign_up
+      login
+      post("/add-a-space?title=Snowden&address=Excelsior Rd, Western Ave, Cardiff CF14 3AT&description=Time waits for no man.
+        Unless that man is Chuck Norris.&daily_rate=100&first_available=2023-01-18&last_available=2023-04-30")
+      get("/log-out")
+      second_sign_up
+      second_log_in
+      post("/bookings",
+        property_id: 21,
+        start_date: "2023-04-18",
+        end_date: "2023-04-20",
+        approved: false)
+      get("/log-out")
+      login
+      @response = get('/account')
+      check200
+      expect(@response.body).to include('Snowden')
+    end
+  end
+
+
   context "GET /add-a-space" do
     it "returns nothing if not logged in" do
       @response = get("/add-a-space")
@@ -243,4 +274,28 @@ describe "MakersBnB" do
       expect(@response.status).to eq 302
     end
   end
+
+  context "POST /approve-reject" do
+    it "approves the request and updates the account page" do
+      sign_up
+      login
+      post("/add-a-space?title=Snowden&address=Excelsior Rd, Western Ave, Cardiff CF14 3AT&description=Time waits for no man.
+        Unless that man is Chuck Norris.&daily_rate=100&first_available=2023-01-18&last_available=2023-04-30")
+      get("/log-out")
+      second_sign_up
+      second_log_in
+      post("/bookings",
+        property_id: 23,
+        start_date: "2023-04-18",
+        end_date: "2023-04-20",
+        approved: false)
+      get("/log-out")
+      login
+      @response = post("/approve-reject/#{Booking.last.id}&true")
+      expect(@response.status).to eq 302
+      expect(Booking.last.approved).to eq true
+      expect(Booking.last.responded).to eq true
+    end
+  end
+
 end
