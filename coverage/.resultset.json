@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/tmccoy99/engineering-project-1/spec/email_spec.rb": {
+      "/Users/adam/Desktop/engineering-project-1/spec/email_spec.rb": {
         "lines": [
           1,
           1,
@@ -37,7 +37,7 @@
           null
         ]
       },
-      "/Users/tmccoy99/engineering-project-1/spec/integration/app_spec.rb": {
+      "/Users/adam/Desktop/engineering-project-1/spec/integration/app_spec.rb": {
         "lines": [
           1,
           1,
@@ -254,7 +254,7 @@
           1,
           1,
           1,
-          1,
+          0,
           null,
           null,
           null,
@@ -336,6 +336,6 @@
         ]
       }
     },
-    "timestamp": 1674211228
+    "timestamp": 1677169275
   }
 }
